@@ -22,6 +22,7 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'gikmx/ctrlp-obsession'
 Plug 'bagrat/vim-workspace'
 Plug 'bogado/file-line'
+Plug 'tmux-plugins/vim-tmux'
 call plug#end()
 
 """" Plugin options

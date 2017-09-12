@@ -1,14 +1,47 @@
-" Use the Solarized Dark theme
-set background=dark
-colorscheme solarized
-let g:solarized_termtrans=1
-
 " Make Vim more useful
 set nocompatible
+" Use the Solarized Dark theme
+set background=dark
+colorscheme default
+
+"" Plugins:
+" Specify a directory for plugins
+call plug#begin('~/.vim/plugged')" Any valid git URL is allowed for plugin
+Plug 'tpope/vim-sensible'
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'takac/vim-hardtime'
+"Plug 'Valloric/YouCompleteMe'
+Plug 'ajh17/VimCompletesMe'
+Plug 'derekwyatt/vim-fswitch'
+Plug 'tpope/vim-obsession'
+Plug 'dhruvasagar/vim-prosession'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'gikmx/ctrlp-obsession'
+Plug 'bagrat/vim-workspace'
+Plug 'bogado/file-line'
+call plug#end()
+
+"""" Plugin options
+" vim workspace "
+noremap <Tab> :WSNext<CR>
+noremap <S-Tab> :WSPrev<CR>
+noremap <Leader><Tab> :WSClose<CR>
+noremap <Leader><S-Tab> :WSClose!<CR>
+noremap <C-t> :WSTabNew<CR>
+
+cabbrev bonly WSBufOnly
+"
+
+" CtrlP
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_show_hidden = 1
+"
+
+
 " Use the OS clipboard by default (on versions compiled with `+clipboard`)
 set clipboard=unnamed
-" Enhance command-line completion
-set wildmenu
 " Allow cursor keys in insert mode
 set esckeys
 " Allow backspace in insert mode
@@ -49,7 +82,7 @@ set cursorline
 " Make tabs as wide as two spaces
 set tabstop=2
 " Show “invisible” characters
-set lcs=tab:▸\ ,trail:·,eol:¬,nbsp:_
+"set lcs=tab:▸\ ,trail:·,eol:$,nbsp:_
 set list
 " Highlight searches
 set hlsearch
@@ -104,3 +137,139 @@ if has("autocmd")
 	" Treat .md files as Markdown
 	autocmd BufNewFile,BufRead *.md setlocal filetype=markdown
 endif
+
+" View buffers with <Leader>b
+"  :b  lets you autocomplete any open buffer
+"  :b! switch, and set current buffer to hidden
+"  :ls gives you buffers that you have currently open
+nnoremap <Leader>b :ls<CR>:b!<Space>#
+
+" FINDING FILES:
+" Search down into subfolders
+" Provides tab-completion for all file-related tasks
+set path+=**
+
+" Display all matching files when we tab complete
+if has("wildmenu")
+    " make tab perform for autocompletion as the terminal
+    set wildmenu
+    set wildmode=longest:list
+endif
+
+" TAG JUMPING:
+" Create the `tags` file (may need to install ctags first)
+"   ^] to jump to tag under cursor
+"  g^] for ambiguous tags
+"   ^t to jump back up the tag stack
+"   ^o to return
+command! MakeTags !ctags -R .
+
+" AUTOCOMPLETE:
+" The good stuff is documented in |ins-completion|
+" - ^x^n for JUST this file
+" - ^x^f for filenames (works with our path trick!)
+" - ^x^] for tags only
+" - ^n for anything specified by the 'complete' option
+" - ^p to go back
+
+
+" FILE BROWSING:
+" - :edit a folder to open a file browser
+" - <CR>/v/t to open in an h-split/v-split/tab
+" - check |netrw-browse-maps| for more mappings
+let g:netrw_banner=0        " disable annoying banner
+let g:netrw_browse_split=4  " open in prior window
+let g:netrw_altv=1          " open splits to the right
+let g:netrw_liststyle=3     " tree view
+let g:netrw_list_hide=netrw_gitignore#Hide()
+let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
+
+
+" SNIPPETS:
+" Read an empty HTML template and move cursor to title
+" - Take over the world!
+"   (with much fewer keystrokes)
+"nnoremap ,html :-1read $HOME/.vim/.skeleton.html<CR>3jwf>a
+nnoremap ,html :-1read $HOME/.vim/.skeleton.html<CR>/title<CR>f>a
+nnoremap ,cpp_main :-1read $HOME/.vim/.skeleton.cpp<CR>/title<CR>f>a
+nnoremap ,pl :-1read $HOME/.vim/.skeleton.pl<CR>Gi
+
+" BUILD INTEGRATION:
+" - Run :make to run make
+" - :cl to list errors
+" - :cc# to jump to error by number
+" - :cn and :cp to navigate forward and back
+
+
+" REGISTERS AND MACROS:
+" - "ky   Yank current selection into register k 
+" - "kyy  Yank current line into register k
+" - "Kyy  Append current line to registerk
+" - "kp   Paste register k
+"
+" - qm    Record into register m
+" - @m    Execute register m
+" - 100@m Execute register m 100 times
+"
+" - let @d='<td></td>'   Set register d!!
+" - echo @d              Echo @d
+"
+" Special registers:
+"   +   System clipboard
+"   *   Mouse highlight clipboard
+"   0   Holds the last yank
+"   -   Last small delete
+"   1-9 Last delete or change registers
+"   /   Last search command
+"   :   Last command
+"
+" :reg  Currently defined registers
+"
+" CTRL-R {0-9a-z"%#:-=.}                  *c_CTRL-R* *c_<C-R>*
+"        Insert the contents of a numbered or named register.  Between
+"        typing CTRL-R and the second character '"' will be displayed
+"        <...snip...>
+"        Special registers:
+"            '"' the unnamed register, containing the text of
+"                the last delete or yank
+"            '%' the current file name
+"            '#' the alternate file name
+"            '*' the clipboard contents (X11: primary selection)
+"            '+' the clipboard contents
+"            '/' the last search pattern
+"            ':' the last command-line
+"            '-' the last small (less than a line) delete
+"            '.' the last inserted text
+"                            *c_CTRL-R_=*
+"            '=' the expression register: you are prompted to
+"                enter an expression (see |expression|)
+"                (doesn't work at the expression prompt; some
+"                things such as changing the buffer or current
+"                window are not allowed to avoid side effects)
+"                When the result is a |List| the items are used
+"                as lines.  They can have line breaks inside
+"                too.
+"                When the result is a Float it's automatically
+"                converted to a String.
+"        See |registers| about registers.  {not in Vi}
+"        <...snip...>
+"
+
+
+" MOVEMENTS:
+" B and E !!!!!!
+" H M L !!!!
+" zz !!
+" :g/virus/norm EEa% !!! Append % in the second column for all lines matching  virus
+
+
+" HELP:
+" :help   ^n    Show me what Ctrl-N does in normal mode
+" :help i_^n         -||-                in insert mode
+" :help c_^n         -||-                in command mode
+"
+" :helpgrep KEYWORD
+"
+" q:, or :<C-f>, instead provides a way to browse your command-line history and edit it like a normal buffer. This makes it easy to find a previous command you ran, edit it with normal Vim commands, and then run the modified command. 
+" The q/ and q? commands exist to provide the same functionality for the search history.
+

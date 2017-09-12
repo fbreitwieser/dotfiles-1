@@ -2,7 +2,10 @@
 set nocompatible
 " Use the Solarized Dark theme
 set background=dark
-colorscheme default
+let g:solarized_visibility = "high"
+let g:solarized_contrast = "high"
+colorscheme solarized
+
 
 "" Plugins:
 " Specify a directory for plugins
@@ -101,7 +104,7 @@ set nostartofline
 " Show the cursor position
 set ruler
 " Don’t show the intro message when starting Vim
-set shortmess=atI
+"set shortmess=atI
 " Show the current mode
 set showmode
 " Show the filename in the window titlebar

@@ -12,7 +12,9 @@ git submodule update --init --recursive --remote
 function doIt() {
 	rsync --exclude ".git/" \
 		--exclude ".DS_Store" \
-		--exclude ".osx" \
+		--exclude ".macos" \
+		--exclude ".archlinux" \
+		--exclude "brew.sh" \
 		--exclude "bootstrap.sh" \
 		--exclude "README.md" \
 		--exclude "LICENSE-MIT.txt" \

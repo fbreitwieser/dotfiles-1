@@ -4,7 +4,7 @@ set nocompatible
 set background=dark
 let g:solarized_visibility = "high"
 let g:solarized_contrast = "high"
-colorscheme solarized
+colorscheme default
 
 
 "" Plugins:
@@ -82,12 +82,17 @@ set number
 " Enable syntax highlighting
 syntax on
 " Highlight current line
-set cursorline
+"set cursorline
 " Make tabs as wide as two spaces
 set tabstop=2
 " Show “invisible” characters
-"set lcs=tab:▸\ ,trail:·,eol:$,nbsp:_
 set list
+set listchars=tab:>-,trail:·,eol:$,nbsp:_
+" Set Highlight for listchars
+hi NonText ctermfg=234
+hi SpecialKey ctermfg=234
+" Toggle listchars with <leader>l
+nmap <leader>l :set invlist<cr>
 " Highlight searches
 set hlsearch
 " Ignore case of searches
@@ -276,4 +281,3 @@ nnoremap ,pl :-1read $HOME/.vim/.skeleton.pl<CR>Gi
 "
 " q:, or :<C-f>, instead provides a way to browse your command-line history and edit it like a normal buffer. This makes it easy to find a previous command you ran, edit it with normal Vim commands, and then run the modified command. 
 " The q/ and q? commands exist to provide the same functionality for the search history.
-

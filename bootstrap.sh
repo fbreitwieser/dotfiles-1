@@ -3,7 +3,7 @@
 cd "$(dirname "${BASH_SOURCE}")";
 
 git pull origin master;
-git submodule update --init --recursive --remote
+#git submodule update --init --recursive --remote
 
 #curl -fLo .vim/autoload/plug.vim --create-dirs \
 #    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim

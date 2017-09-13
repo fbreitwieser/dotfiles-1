@@ -86,7 +86,7 @@ syntax on
 " Make tabs as wide as two spaces
 set tabstop=2
 " Show “invisible” characters
-set list
+set invlist
 set listchars=tab:>-,trail:·,eol:$,nbsp:_
 " Set Highlight for listchars
 hi NonText ctermfg=234

@@ -95,14 +95,14 @@ fi;
 if [[ "${USER}" == "root" ]]; then
 	userStyle="${orange}";
 else
-	userStyle="${white}";
+	userStyle="${reset}";
 fi;
 
 # Highlight the hostname when connected via SSH.
 if [[ "${SSH_TTY}" ]]; then
 	hostStyle="${yellow}";
 else
-	hostStyle="${white}";
+	hostStyle="${reset}";
 fi;
 
 #directoryStyle="${green}"
@@ -114,14 +114,14 @@ PS1="\[\033]0;\W\007\]"; # working directory base name
 PS1+="\[${userStyle}\]\u"; # username
 PS1+="\[${yellow}\]@";
 PS1+="\[${hostStyle}\]\h"; # host
-PS1+="\[${white}\] ";
+PS1+="\[${reset}\] ";
 PS1+="\[${directoryStyle}\]\w"; # working directory full path
-PS1+="\$(prompt_git \"\[${white}\] (git)-\[${violet}\]\" \"\[${red}\]\")"; # Git repository details
+PS1+="\$(prompt_git \"\[${reset}\] (git)-\[${violet}\]\" \"\[${red}\]\")"; # Git repository details
 PS1+="\n";
-PS1+="\[${white}\]\$ \[${reset}\]"; # `$` (and reset color)
+PS1+="\[${reset}\]\$ \[${reset}\]"; # `$` (and reset color)
 export PS1;
 
 PS2="\[${yellow}\]→ \[${reset}\]";
 export PS2;
 
-export PROMPT_COMMAND="echo -n [$(date +%H:%M)]"
+export PROMPT_COMMAND="echo -n [$(date +%H:%M)] "

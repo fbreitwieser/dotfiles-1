@@ -1,0 +1,17 @@
+
+function aurinstall {
+    [ -d ~/aur ] || mkdir ~/aur
+    for PKG in $*; do
+        set -x
+        if [ -d ~/aur/$PKG ]; then
+            cd ~/aur/$PKG
+            git pull
+        else
+            git clone https://aur.archlinux.org/$PKG.git ~/aur/$PKG
+            cd ~/aur/$1
+        fi
+        makepkg -si
+        cd -
+        set +x
+    done
+}

@@ -29,3 +29,9 @@ gsettings set org.gnome.Terminal.Legacy.Settings default-show-menubar false
 # Shell
 gsettings set org.gnome.shell favorite-apps ['org.gnome.Nautilus.desktop', 'org.gnome.Terminal.desktop', 'chromium.desktop']
 gsettings set org.gnome.shell enabled-extensions ['apps-menu@gnome-shell-extensions.gcampax.github.com']
+
+# Fonts
+gsettings set org.gnome.desktop.wm.preferences titlebar-font 'Cantarell 10'
+gsettings set org.gnome.desktop.wm.preferences titlebar-uses-system-font false
+gsettings set org.gnome.desktop.interface font-name 'Cantarell 10'
+gsettings set org.gnome.desktop.interface document-font-name 'Sans 10'

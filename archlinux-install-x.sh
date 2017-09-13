@@ -11,7 +11,7 @@ sudo systemctl enable gdm
 sudo pacman -S --needed gnome-tweak-tool 
 yaourt -S gnome-shell-extension-installer
 sudo pacman -S --needed virtualbox-guest-utils
-sudo pacman -S --needed chromium
+sudo pacman -S --needed chromium gtk2
 
 ## Gnome settings
 # disable animations:

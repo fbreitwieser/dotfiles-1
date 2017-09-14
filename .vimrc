@@ -23,6 +23,10 @@ Plug 'gikmx/ctrlp-obsession'
 Plug 'bagrat/vim-workspace'
 Plug 'bogado/file-line'
 Plug 'tmux-plugins/vim-tmux'
+Plug 'easymotion/vim-easymotion'
+Plug 'majutsushi/tagbar'
+Plug 'xolox/vim-misc'
+Plug 'xolox/vim-easytags'
 call plug#end()
 
 """" Plugin options

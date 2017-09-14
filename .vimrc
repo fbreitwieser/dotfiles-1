@@ -27,6 +27,7 @@ Plug 'easymotion/vim-easymotion'
 Plug 'majutsushi/tagbar'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-easytags'
+Plug 'tpope/vim-fugitive'
 call plug#end()
 
 """" Plugin options

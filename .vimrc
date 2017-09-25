@@ -28,6 +28,7 @@ Plug 'majutsushi/tagbar'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-easytags'
 Plug 'tpope/vim-fugitive'
+Plug 'octol/vim-cpp-enhanced-highlight'
 call plug#end()
 
 """" Plugin options

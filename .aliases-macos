@@ -1,4 +1,4 @@
-u#####################
+#####################
 ### MacOS Stuff ..
 # JavaScriptCore REPL
 # Get macOS Software Updates, and update installed Ruby gems, Homebrew, npm, and their installed packages
@@ -83,3 +83,7 @@ alias chromekill="ps ux | grep '[C]hrome Helper --type=renderer' | grep -v exten
 # Lock the screen (when going AFK)
 alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
 
+## Paths for LLVM
+export LIBRARY_PATH=/usr/local/opt/llvm/lib:$LIBRARY_PATH
+export LD_LIBRARY_PATH=/usr/local/opt/llvm/lib:$LD_LIBRARY_PATH
+alias gcc=g++-7

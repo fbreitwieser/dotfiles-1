@@ -41,7 +41,6 @@ brew install vim --with-override-system-vi
 brew install grep
 brew install openssh
 brew install screen
-brew install htop
 brew install homebrew/php/php56 --with-gmp
 
 # Install font tools.
@@ -95,9 +94,11 @@ brew install tree
 brew install vbindiff
 brew install zopfli
 
-# Install development tools
+# Install development and other tools (miiine)
 brew install llvm
 brew install gcc
+brew install reattach-to-user-namespace
+brew install htop
 
 # Remove outdated versions from the cellar.
 brew cleanup

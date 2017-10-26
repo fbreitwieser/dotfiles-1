@@ -126,7 +126,7 @@ directoryStyle="${reset}"
 PS1="\[\033]0;\W\007\]"; # working directory base name
 #PS1+="\[${bold}\]\n"; # newline
 [[ "$USER" -ne "fbreitwieser" ]] && PS1+="\[${userStyle}\]\u\[${hostStyle}\]@"; # username
-PS1+="\[${hostStyle}\]\h"; # host
+PS1+="\[${hostStyle}\]@\h"; # host
 #PS1+="\[${reset}\]";
 PS1+=" \[${directoryStyle}\]\w"; # working directory full path
 PS1+="\$(my_prompt_git \"\[$reset\] \[$violet\]\" \"\[$violet\]\")"; # Git repository details
@@ -142,10 +142,10 @@ trap "tput sgr0" DEBUG
 
 pc() {
   exit=$?
-  time=`date "+%H_%M"`
+  time=`date "+%H%M"`
   ## Escape non-printable characters within printf with \001 and \002!
   ## https://superuser.com/questions/301353/escape-non-printing-characters-in-a-function-for-a-bash-prompt/301355#301355
-  [ $exit -eq 0 ] && printf "\001${reset}\002$time " || printf "\001${red}\002$time "
+  [ $exit -eq 0 ] && printf "\001${hostStyle}\002$time " || printf "\001${red}\002$time "
   return $exit
 }
 

@@ -1,0 +1,45 @@
+#!/bin/bash
+# from https://askubuntu.com/a/884513
+# For LS_COLORS, print color, type, and, if available, description.
+
+IFS=:
+for ls_color in $LS_COLORS; do
+    color="${ls_color#*=}"
+    type="${ls_color%=*}"
+
+    # Add descriptions for named types.
+    case "$type" in
+        bd) type+=" (block device)" ;;
+        ca) type+=" (file with capability)" ;;
+        cd) type+=" (character device)" ;;
+        di) type+=" (directory)" ;;
+        do) type+=" (door)" ;;
+        ex) type+=" (executable file)" ;;
+        fi) type+=" (file)" ;;
+        ln) type+=" (symbolic link)" ;;
+        mh) type+=" (multi-hardlink)" ;;
+        mi) type+=" (missing file)" ;;
+        no) type+=" (normal file)" ;;
+        or) type+=" (orphan symlink)" ;;
+        ow) type+=" (dir - other-writable)" ;;
+        pi) type+=" (named pipe)" ;;
+        rs) type+=" (reset to normal color)" ;;
+        sg) type+=" (set gid)" ;;
+        so) type+=" (socket)" ;;
+        st) type+=" (dir - sticky)" ;;
+        su) type+=" (set uid)" ;;
+        tw) type+=" (dir - sticky and other-writable)" ;;
+        *)  ;;
+    esac
+
+    # Separate each color with a newline.
+    if [[ $color_prev ]] && [[ $color != $color_prev ]]; then
+        echo
+    fi
+
+    printf "\e[%sm%s\e[m " "$color" "$type"
+
+    # For next loop
+    color_prev="$color"
+done
+echo

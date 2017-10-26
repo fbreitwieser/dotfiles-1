@@ -1,16 +1,18 @@
 " Make Vim more useful
 set nocompatible
-" Use the Solarized Dark theme
-set background=dark
-colorscheme solarized
-let g:solarized_termcolors= 16
-let g:solarized_termtrans = 16
+set t_Co=256
+colorscheme default
 
-let g:solarized_bold = 1
-let g:solarized_underline = 1
-let g:solarized_italic = 1
-let g:solarized_contrast = "high"
-let g:solarized_visibility= "high"
+" Use the Solarized Dark theme
+"set background=dark
+"let g:solarized_termcolors= 16
+"let g:solarized_termtrans = 16
+"let g:solarized_bold = 1
+"let g:solarized_underline = 1
+"let g:solarized_italic = 1
+"let g:solarized_contrast = "high"
+"let g:solarized_visibility= "high"
+
 
 "colorscheme default
 
@@ -22,7 +24,7 @@ call plug#begin('~/.vim/plugged')" Any valid git URL is allowed for plugin
 "Plug 'tpope/vim-obsession'
 "Plug 'gikmx/ctrlp-obsession'
 "Plug 'dhruvasagar/vim-prosession'
-Plug 'ajh17/VimCompletesMe'
+Plug 'ajh17/VimCompletesMe'  " tab completion does local keyword completion (^X^N), file path completion (^X^F) and omni-completion(^X^O)
 Plug 'bagrat/vim-workspace'
 Plug 'bogado/file-line'
 Plug 'ctrlpvim/ctrlp.vim'
@@ -40,6 +42,7 @@ Plug 'tpope/vim-sleuth'
 Plug 'xolox/vim-easytags'
 Plug 'xolox/vim-misc'
 call plug#end()
+
 
 """" Plugin options
 " vim workspace "
@@ -112,11 +115,12 @@ syntax on
 " Make tabs as wide as four spaces
 set tabstop=4
 " Show “invisible” characters
-set invlist
+"set invlist
 set listchars=tab:>-,trail:·,eol:$,nbsp:_
 " Set Highlight for listchars
-hi NonText ctermfg=232
-hi SpecialKey ctermfg=232
+highlight NonText ctermfg=darkgrey
+highlight SpecialKey ctermfg=darkgrey
+highlight LineNr ctermfg=darkgrey guifg=#050505
 " Toggle listchars with <leader>l
 nmap <leader>l :set invlist<cr>
 " Highlight searches
@@ -226,8 +230,11 @@ let g:netrw_banner=0        " disable annoying banner
 let g:netrw_browse_split=4  " open in prior window
 let g:netrw_altv=1          " open splits to the right
 let g:netrw_liststyle=3     " tree view
-let g:netrw_list_hide=netrw_gitignore#Hide()
-let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
+
+if v:version >= 704
+	let g:netrw_list_hide=netrw_gitignore#Hide()
+	let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
+endif
 
 
 " SNIPPETS:

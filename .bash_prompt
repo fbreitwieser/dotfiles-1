@@ -17,9 +17,10 @@ my_prompt_git() {
 
 		local branchName="$(git symbolic-ref --quiet HEAD | sed 's#.*/##' 2> /dev/null || \
 			git rev-parse --short HEAD 2> /dev/null || \
-			echo '(unknown)')";
-		[[ "$branchName" == "master" ]] && branchName=""
-		echo -e "${1}${branchName}${2}${s}$reset ";
+			echo 'unknown')";
+		#[[ "$branchName" == "master" ]] && branchName=""
+		branchName="[$branchName]"
+		echo -e " ${1}${branchName}${2}${s}$reset";
 	else
 		return;
 	fi
@@ -90,19 +91,22 @@ if tput setaf 1 &> /dev/null; then
 	violet=$(tput setaf 61);
 	white=$(tput setaf 15);
 	yellow=$(tput setaf 136);
+	underline="\e[4m"
 else
-	bold='';
 	reset="\e[0m";
-	black="\e[1;30m";
-	blue="\e[1;34m";
-	cyan="\e[1;36m";
-	green="\e[1;32m";
-	orange="\e[1;33m";
-	purple="\e[1;35m";
-	red="\e[1;31m";
-	violet="\e[1;35m";
-	white="\e[1;37m";
-	yellow="\e[1;33m";
+	bold="\e[1m";
+	italic="\e[3m";
+	black="\e[30m";
+	blue="\e[34m";
+	cyan="\e[36m";
+	green="\e[32m";
+	orange="\e[33m";
+	purple="\e[35m";
+	red="\e[31m";
+	violet="\e[35m";
+	white="\e[37m";
+	yellow="\e[33m";
+	underline="\e[4m"
 fi;
 
 # Highlight the user name when logged in as root.
@@ -113,10 +117,12 @@ else
 fi;
 
 # Highlight the hostname when connected via SSH.
+hostnamecolor=$(hostname | od | tr ' ' '\n' | awk '{total = total + $1}END{print 31 + (total % 7)}')
+hostStyle="\e[${hostnamecolor}m"
 if [[ "${SSH_TTY}" ]]; then
-	hostStyle="${yellow}";
+	hostStyle1="$underline$hostStyle";
 else
-	hostStyle="${violet}";
+	hostStyle1="$hostStyle";
 fi;
 
 #directoryStyle="${green}"
@@ -126,12 +132,12 @@ directoryStyle="${reset}"
 PS1="\[\033]0;\W\007\]"; # working directory base name
 #PS1+="\[${bold}\]\n"; # newline
 [[ "$USER" -ne "fbreitwieser" ]] && PS1+="\[${userStyle}\]\u\[${hostStyle}\]@"; # username
-PS1+="\[${hostStyle}\]@\h"; # host
-#PS1+="\[${reset}\]";
+PS1+="\[${hostStyle1}\]@\h"; # host
+PS1+="\[${reset}\]";
 PS1+=" \[${directoryStyle}\]\w"; # working directory full path
-PS1+="\$(my_prompt_git \"\[$reset\] \[$violet\]\" \"\[$violet\]\")"; # Git repository details
+PS1+="\$(my_prompt_git \"\[$reset\]\[$violet\]\" \"\[$violet\]\")"; # Git repository details
 #PS1+="\n";
-PS1+="\[$reset\]\$ \[${green}\]"; # `$` (and reset color)
+PS1+="\[$reset\] \$ \[${green}\]"; # `$` (and reset color)
 export PS1;
 
 PS2="\[${yellow}\]→ \[${reset}\]";

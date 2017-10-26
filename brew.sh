@@ -99,6 +99,8 @@ brew install llvm
 brew install gcc
 brew install reattach-to-user-namespace
 brew install htop
+brew install git-cola
+brew tap homebrew/science
 
 # Remove outdated versions from the cellar.
 brew cleanup

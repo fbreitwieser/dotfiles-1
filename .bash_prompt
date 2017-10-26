@@ -18,7 +18,8 @@ my_prompt_git() {
 		local branchName="$(git symbolic-ref --quiet --short HEAD 2> /dev/null || \
 			git rev-parse --short HEAD 2> /dev/null || \
 			echo '(unknown)')";
-		echo -e "${1}${branchName}${2}${s}";
+		[[ "$branchName" == "master" ]] && branchName=""
+		echo -e "${1}${branchName}${2}${s}$reset ";
 	else
 		return;
 	fi
@@ -115,26 +116,37 @@ fi;
 if [[ "${SSH_TTY}" ]]; then
 	hostStyle="${yellow}";
 else
-	hostStyle="${reset}";
+	hostStyle="${violet}";
 fi;
 
 #directoryStyle="${green}"
-directoryStyle="${green}"
+directoryStyle="${reset}"
 
 # Set the terminal title and prompt.
 PS1="\[\033]0;\W\007\]"; # working directory base name
 #PS1+="\[${bold}\]\n"; # newline
-PS1+="\[${userStyle}\]\u"; # username
-PS1+="\[${yellow}\]@";
+[[ "$USER" -ne "fbreitwieser" ]] && PS1+="\[${userStyle}\]\u\[${hostStyle}\]@"; # username
 PS1+="\[${hostStyle}\]\h"; # host
-PS1+="\[${reset}\] ";
-PS1+="\[${directoryStyle}\]\w"; # working directory full path
-PS1+="\$(my_prompt_git \"\[${reset}\] (git)-\[${violet}\]\" \"\[${red}\]\")"; # Git repository details
-PS1+="\n";
-PS1+="\[${reset}\]\$ \[${reset}\]"; # `$` (and reset color)
+#PS1+="\[${reset}\]";
+PS1+=" \[${directoryStyle}\]\w"; # working directory full path
+PS1+="\$(my_prompt_git \"\[$reset\] \[$violet\]\" \"\[$violet\]\")"; # Git repository details
+#PS1+="\n";
+PS1+="\[$reset\]\$ \[${green}\]"; # `$` (and reset color)
 export PS1;
 
 PS2="\[${yellow}\]→ \[${reset}\]";
 export PS2;
 
-export PROMPT_COMMAND="echo -n [$(date +%H:%M)] "
+## Reset after command
+trap "tput sgr0" DEBUG
+
+pc() {
+  exit=$?
+  time=`date "+%H_%M"`
+  ## Escape non-printable characters within printf with \001 and \002!
+  ## https://superuser.com/questions/301353/escape-non-printing-characters-in-a-function-for-a-bash-prompt/301355#301355
+  [ $exit -eq 0 ] && printf "\001${reset}\002$time " || printf "\001${red}\002$time "
+  return $exit
+}
+
+export PROMPT_COMMAND=pc

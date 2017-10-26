@@ -2,34 +2,43 @@
 set nocompatible
 " Use the Solarized Dark theme
 set background=dark
-let g:solarized_visibility = "high"
+colorscheme solarized
+let g:solarized_termcolors= 16
+let g:solarized_termtrans = 16
+
+let g:solarized_bold = 1
+let g:solarized_underline = 1
+let g:solarized_italic = 1
 let g:solarized_contrast = "high"
-colorscheme default
+let g:solarized_visibility= "high"
+
+"colorscheme default
 
 
 "" Plugins:
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')" Any valid git URL is allowed for plugin
-Plug 'tpope/vim-sensible'
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-Plug 'takac/vim-hardtime'
 "Plug 'Valloric/YouCompleteMe'
+"Plug 'tpope/vim-obsession'
+"Plug 'gikmx/ctrlp-obsession'
+"Plug 'dhruvasagar/vim-prosession'
 Plug 'ajh17/VimCompletesMe'
-Plug 'derekwyatt/vim-fswitch'
-Plug 'tpope/vim-obsession'
-Plug 'dhruvasagar/vim-prosession'
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'gikmx/ctrlp-obsession'
 Plug 'bagrat/vim-workspace'
 Plug 'bogado/file-line'
-Plug 'tmux-plugins/vim-tmux'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'chrisbra/csv.vim'
+Plug 'derekwyatt/vim-fswitch'
 Plug 'easymotion/vim-easymotion'
 Plug 'majutsushi/tagbar'
-Plug 'xolox/vim-misc'
-Plug 'xolox/vim-easytags'
-Plug 'tpope/vim-fugitive'
 Plug 'octol/vim-cpp-enhanced-highlight'
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'takac/vim-hardtime'
+Plug 'tmux-plugins/vim-tmux'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-sleuth'
+Plug 'xolox/vim-easytags'
+Plug 'xolox/vim-misc'
 call plug#end()
 
 """" Plugin options
@@ -75,6 +84,16 @@ if exists("&undodir")
 	set undodir=~/.vim/undo
 endif
 
+" Keep undo history across sessions by storing it in a file
+if has('persistent_undo')
+    " Create dirs
+    set undodir=$HOME/.vim/undo " directory must exist!
+    set undofile
+    set undolevels=1000         " How many undos
+    set undoreload=10000        " number of lines to save for undo
+endif
+
+
 " Don’t create backups when editing files in certain directories
 set backupskip=/tmp/*,/private/tmp/*
 
@@ -91,7 +110,7 @@ syntax on
 " Highlight current line
 "set cursorline
 " Make tabs as wide as four spaces
-"set tabstop=4
+set tabstop=4
 " Show “invisible” characters
 set invlist
 set listchars=tab:>-,trail:·,eol:$,nbsp:_
@@ -108,8 +127,13 @@ set ignorecase
 set incsearch
 " Always show status line
 set laststatus=2
-" Enable mouse in all modes
-set mouse=a
+" Enable mouse in GUI mode
+if has("gui_running")
+    set mouse=a
+else
+    set mouse=
+endif
+
 " Disable error bells
 set noerrorbells
 " Don’t reset cursor to start of line when moving around.
@@ -152,6 +176,11 @@ if has("autocmd")
 	autocmd BufNewFile,BufRead *.json setfiletype json syntax=javascript
 	" Treat .md files as Markdown
 	autocmd BufNewFile,BufRead *.md setlocal filetype=markdown
+
+  " Jump to last open position
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+    \| exe "normal! g'\"" | endif
+
 endif
 
 " View buffers with <Leader>b

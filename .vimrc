@@ -29,6 +29,7 @@ Plug 'xolox/vim-misc'
 Plug 'xolox/vim-easytags'
 Plug 'tpope/vim-fugitive'
 Plug 'octol/vim-cpp-enhanced-highlight'
+Plug 'tpope/vim-sleuth'
 call plug#end()
 
 """" Plugin options
@@ -89,14 +90,14 @@ set number
 syntax on
 " Highlight current line
 "set cursorline
-" Make tabs as wide as two spaces
-set tabstop=2
+" Make tabs as wide as four spaces
+"set tabstop=4
 " Show “invisible” characters
 set invlist
 set listchars=tab:>-,trail:·,eol:$,nbsp:_
 " Set Highlight for listchars
-hi NonText ctermfg=234
-hi SpecialKey ctermfg=234
+hi NonText ctermfg=232
+hi SpecialKey ctermfg=232
 " Toggle listchars with <leader>l
 nmap <leader>l :set invlist<cr>
 " Highlight searches

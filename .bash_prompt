@@ -20,7 +20,7 @@ my_prompt_git() {
 			echo 'unknown')";
 		#[[ "$branchName" == "master" ]] && branchName=""
 		branchName="[$branchName]"
-		echo -e " ${1}${branchName}${2}${s}$reset";
+		printf " ${1}${branchName}${2}${s}$reset";
 	else
 		return;
 	fi
@@ -117,7 +117,7 @@ else
 fi;
 
 # Highlight the hostname when connected via SSH.
-hostnamecolor=$(hostname | od | tr ' ' '\n' | awk '{total = total + $1}END{print 31 + (total % 7)}')
+hostnamecolor=$(hostname | od | tr ' ' '\n' | awk '{total = total + $1}END{print 32 + (total % 6)}')
 hostStyle="\e[${hostnamecolor}m"
 if [[ "${SSH_TTY}" ]]; then
 	hostStyle1="$underline$hostStyle";
@@ -128,14 +128,18 @@ fi;
 #directoryStyle="${green}"
 directoryStyle="${reset}"
 
+u() { [ "$USER" == "fbreitwieser" ] || printf "\001${userStyle}\002$USER" ; }
+
 # Set the terminal title and prompt.
 PS1="\[\033]0;\W\007\]"; # working directory base name
 #PS1+="\[${bold}\]\n"; # newline
-[[ "$USER" -ne "fbreitwieser" ]] && PS1+="\[${userStyle}\]\u\[${hostStyle}\]@"; # username
+PS1+="\$( u || printf "$USER" )"; # username
 PS1+="\[${hostStyle1}\]@\h"; # host
 PS1+="\[${reset}\]";
 PS1+=" \[${directoryStyle}\]\w"; # working directory full path
-PS1+="\$(my_prompt_git \"\[$reset\]\[$violet\]\" \"\[$violet\]\")"; # Git repository details
+if [ "$(type -t my_prompt_git)" == 'function' ]; then
+  PS1+="\$(my_prompt_git \"\[$reset\]\[$violet\]\" \"\[$violet\]\" 2> /dev/null)"; # Git repository details
+fi
 #PS1+="\n";
 PS1+="\[$reset\] \$ \[${green}\]"; # `$` (and reset color)
 export PS1;
@@ -154,5 +158,7 @@ pc() {
   [ $exit -eq 0 ] && printf "\001${hostStyle}\002$time " || printf "\001${hostStyle}\002$time \001$red\002$exit "
   return $exit
 }
+
+export -f pc
 
 export PROMPT_COMMAND=pc

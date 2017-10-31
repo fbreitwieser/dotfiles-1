@@ -76,7 +76,7 @@ prompt_git() {
 	fi;
 }
 
-if tput setaf 1 &> /dev/null; then
+if tput setaf 1 &> /dev/null 2>/dev/null; then
 	tput sgr0; # reset colors
 	bold=$(tput bold);
 	reset=$(tput sgr0);
@@ -138,7 +138,7 @@ PS1+="\[${hostStyle1}\]@\h"; # host
 PS1+="\[${reset}\]";
 PS1+=" \[${directoryStyle}\]\w"; # working directory full path
 if [ "$(type -t my_prompt_git)" == 'function' ]; then
-  PS1+="\$(my_prompt_git \"\[$reset\]\[$violet\]\" \"\[$violet\]\" 2> /dev/null)"; # Git repository details
+  PS1+="\$(my_prompt_git '\[$reset\]\[$violet\]' '\[$violet\]' 2> /dev/null)"; # Git repository details
 fi
 #PS1+="\n";
 PS1+="\[$reset\] \$ \[${green}\]"; # `$` (and reset color)
@@ -148,14 +148,16 @@ PS2="\[${yellow}\]→ \[${reset}\]";
 export PS2;
 
 ## Reset after command
-trap "tput sgr0" DEBUG
+#trap "tput sgr0" DEBUG
+#trap "printf '\001\e[0m\002'" DEBUG
 
 pc() {
   exit=$?
   time=`date "+%H%M"`
   ## Escape non-printable characters within printf with \001 and \002!
   ## https://superuser.com/questions/301353/escape-non-printing-characters-in-a-function-for-a-bash-prompt/301355#301355
-  [ $exit -eq 0 ] && printf "\001${hostStyle}\002$time " || printf "\001${hostStyle}\002$time \001$red\002$exit "
+  #[ $exit -eq 0 ] && printf "\001${hostStyle}\002$time " || printf "\001${hostStyle}\002$time \001$red\002$exit "
+  [ $exit -eq 0 ] && printf "${hostStyle}$time " || printf "${hostStyle}$time $red$exit "
   return $exit
 }
 

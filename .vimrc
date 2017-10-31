@@ -28,7 +28,7 @@ Plug 'ajh17/VimCompletesMe'  " tab completion does local keyword completion (^X^
 Plug 'bagrat/vim-workspace'
 Plug 'bogado/file-line'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'chrisbra/csv.vim'
+"Plug 'chrisbra/csv.vim'
 Plug 'derekwyatt/vim-fswitch'
 Plug 'easymotion/vim-easymotion'
 Plug 'majutsushi/tagbar'

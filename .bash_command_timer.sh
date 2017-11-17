@@ -105,6 +105,13 @@ fi
 # flag is set and clear it after the first execution.
 BCT_AT_PROMPT=1
 function BCTPreCommand() {
+  #[[ "$BASH_COMMAND" != "BCTPostCommand" ]] && LASTCMD="$BASH_COMMAND" || LASTCMD=
+  if [[ "$LASTCMD" == "BLAAA" ]]; then
+    if [[ "$BASH_COMMAND" != "$PROMP_COMMAND" ]] && [[ "$BASH_COMMAND" != "command ls "*  ]] && [[ $BASH_COMMAND != "ls "* ]]; then
+      LASTCMD="$BASH_COMMAND"
+      #echo " set LASTCMD to $LASTCMD"
+    fi
+  fi
   if [ -z "$BCT_AT_PROMPT" ]; then
     return
   fi
@@ -113,6 +120,7 @@ function BCTPreCommand() {
   BCT_COMMAND_START_TIME=$(eval $BCTTime)
 }
 trap 'BCTPreCommand' DEBUG
+#trap 'echo ‘$BASH_COMMAND’ failed with error code $?' ERR
 
 # Bash will automatically set COLUMNS to the current terminal width.
 export COLUMNS
@@ -123,6 +131,12 @@ BCT_FIRST_PROMPT=1
 function BCTPostCommand() {
   EXIT_CODE=$?
   BCT_AT_PROMPT=1
+
+  if [[ "$LASTCMD" == "BCTPostCommand" ]]; then
+	export LASTCMD=BLAAA
+	return;
+  fi
+  export LASTCMD=BLAAA
 
   if [ -n "$BCT_FIRST_PROMPT" ]; then
     unset BCT_FIRST_PROMPT
@@ -198,3 +212,8 @@ function BCTPostCommand() {
   echo -e "${output_str_colored}"
 }
 PROMPT_COMMAND='BCTPostCommand'
+
+#[ i-f ~/.bash_preexec.sh ] && . ~/.bash_preexec.sh
+#preexec() { 
+#  LASTCMD="$1"; 
+#}

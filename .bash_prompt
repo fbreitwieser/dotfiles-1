@@ -131,7 +131,7 @@ directoryStyle="${reset}"
 u() { [ "$USER" == "fbreitwieser" ] || printf "\001${userStyle}\002$USER" ; }
 
 # Set the terminal title and prompt.
-PS1="\[\033]0;\W\007\]"; # working directory base name
+PS1="\[\033]0;\h \w\007\]"; # terminal title
 #PS1+="\[${bold}\]\n"; # newline
 PS1+="\$( u || printf "$USER" )"; # username
 PS1+="\[${hostStyle1}\]@\h"; # host
@@ -161,6 +161,6 @@ pc() {
   return $exit
 }
 
-export -f pc
+#export -f pc
+[ -f "${HOME}/.bash_command_timer.sh" ] && . ${HOME}/.bash_command_timer.sh || export PROMPT_COMMAND=pc
 
-export PROMPT_COMMAND=pc

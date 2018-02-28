@@ -19,7 +19,7 @@ colorscheme default
 
 "" Plugins:
 " Specify a directory for plugins
-call plug#begin('~/.vim/plugged')" Any valid git URL is allowed for plugin
+call plug#begin('~/.vim/plugged') " Any valid git URL is allowed for plugin
 "Plug 'Valloric/YouCompleteMe'
 "Plug 'tpope/vim-obsession'
 "Plug 'gikmx/ctrlp-obsession'
@@ -187,11 +187,17 @@ if has("autocmd")
 
 endif
 
+""""" BUFFER OPTIONS
 " View buffers with <Leader>b
 "  :b  lets you autocomplete any open buffer
 "  :b! switch, and set current buffer to hidden
 "  :ls gives you buffers that you have currently open
 nnoremap <Leader>b :ls<CR>:b!<Space>#
+" Easier buffer navigation
+noremap <silent> [b :bprevious<CR>
+noremap <silent> ]b :bnext<CR>
+noremap <silent> [B :bfirst<CR>
+noremap <silent> ]B :blast<CR>
 
 " FINDING FILES:
 " Search down into subfolders

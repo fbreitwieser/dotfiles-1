@@ -46,12 +46,9 @@ call plug#end()
 
 """" Plugin options
 " vim workspace "
-noremap <Tab> :WSNext<CR>
-noremap <S-Tab> :WSPrev<CR>
 noremap <Leader><Tab> :WSClose<CR>
 noremap <Leader><S-Tab> :WSClose!<CR>
 noremap <C-t> :WSTabNew<CR>
-
 cabbrev bonly WSBufOnly
 "
 
@@ -198,6 +195,9 @@ noremap <silent> [b :bprevious<CR>
 noremap <silent> ]b :bnext<CR>
 noremap <silent> [B :bfirst<CR>
 noremap <silent> ]B :blast<CR>
+
+noremap <Tab> :bnext<CR>
+noremap <S-Tab> :bprevious<CR>
 
 " FINDING FILES:
 " Search down into subfolders

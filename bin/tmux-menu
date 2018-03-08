@@ -1,0 +1,41 @@
+#!/bin/sh 
+
+# abort if we're already inside a TMUX session
+[ "$TMUX" == "" ] || exit 0 
+
+pidtree() {
+   pstree -p $1 | grep -o '([0-9]*)' | tr -d '()'
+}
+
+# startup a "default" session if none currently exists
+#tmux has-session -t _default || tmux new-session -s _default -d
+
+# present menu for user to choose which workspace to open
+PS3="Please choose your session: "
+IFS=$'\n'
+options=( $(tmux list-sessions -F "#{session_name} [#{?session_attached,A,} #{session_windows} windows, created on #{session_created_string}]" | sort -f | grep -v '_default') "NEW SESSION" "BASH" "TMUX-PID")
+unset IFS
+echo "################################################"
+echo "## Choose tmux session, or press enter to exit"
+select opt in "${options[@]}"
+do
+    case $opt in
+        "NEW SESSION")
+            read -p "Enter new session name: " SESSION_NAME
+            tmux new -s "$SESSION_NAME"
+            break
+            ;;
+        "BASH")
+            bash --login
+            break;;
+        "TMUX-PID")
+            tmux-pid
+            tmux-menu
+            break;;
+        *) 
+            SESS=${opt/ */}
+            tmux attach-session -t $SESS
+            break
+            ;; 
+    esac
+done

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -xeu -o pipefail
+
+#OPTS="-f4 -F12"
+OPTS="-F12"
+#OPTS="-F4"
+#OPTS=""
+
+if [[ ${1: -4} == ".sam" ]]; then
+    samtools view -Su $OPTS $1 | samtools sort -T $1.sort - ${1/.sam/} && samtools index ${1/.sam/.bam}
+else 
+    samtools view -Su $OPTS - | samtools sort -T $1.sort - -o $1 && samtools index $1
+fi
+

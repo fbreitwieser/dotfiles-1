@@ -1,0 +1,6 @@
+#!/bin/bash
+set -eu
+
+## dustmask STDIN as FASTA and mask all low-complexity sequences
+
+dustmasker -infmt fasta -in $1 -level 20 -outfmt fasta | sed '/^>/! s/[^AGCT]/N/g'

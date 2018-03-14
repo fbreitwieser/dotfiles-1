@@ -97,10 +97,12 @@ fi;
 
 PS1_START_TIME=`date +%s`
 LAST_COMMAND="bash"
+LAST_LAST_COMMAND="bash"
 
 function record_time() {
-	#echo $BASH_COMMAND >&2
-	[[ $BASH_COMMAND != "_mk_prompt" ]] && PS1_START_TIME=`date +%s`
+	LAST_LAST_COMMAND=$LAST_COMMAND
+	LAST_COMMAND=$BASH_COMMAND
+	[[ $LAST_COMMAND != "_mk_prompt" ]] && PS1_START_TIME=`date +%s`
 }
 
 function time_diff_f() {
@@ -129,7 +131,7 @@ trap 'record_time' DEBUG
 PS1_reset='\[\e[0m\]'
 _mk_prompt() {
 	local EXIT="$?"
-	local TIME_DIFF=`time_diff_f`
+	[[ $LAST_LAST_COMMAND != "_mk_prompt" ]] && local TIME_DIFF=`time_diff_f` || local TIME_DIFF=""
 	#local TIME=`date "+%H:%M"`
     # Change the window title of X terminals
     case $TERM in

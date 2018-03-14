@@ -95,10 +95,42 @@ else
 	hostStyle1="$hostStyle";
 fi;
 
+PS1_START_TIME=`date +%s`
+LAST_COMMAND="bash"
 
+function record_time() {
+	#echo $BASH_COMMAND >&2
+	[[ $BASH_COMMAND != "_mk_prompt" ]] && PS1_START_TIME=`date +%s`
+}
+
+function time_diff_f() {
+	local MIN=60
+	local HOUR=3600
+	local DAY=86400
+	local NOW=`date +%s`
+	local time_diff=$(( $NOW - $PS1_START_TIME ))
+	#BC="now=$NOW start=$PS1_START_TIME diff=$time_diff"
+
+	time_str=""
+	local num_days=$(( $time_diff / $DAY ))
+	[[ $num_days -gt 0 ]] && time_str="$time_str${num_days}d"
+	local num_hours=$(( $time_diff % $DAY /$HOUR ))
+	[[ $num_hours -gt 0 || $num_days -gt 0 ]] && time_str="$time_str${num_hours}h"
+	local num_min=$(( $time_diff % $HOUR /$MIN ))
+	[[ $num_min -gt 0 || "$time_str" != ""  ]] && time_str="$time_str${num_min}m"
+	local num_sec=$(( $time_diff % $MIN ))
+	[[ $num_sec -gt 0 || "$time_str" != ""  ]] && time_str="$time_str${num_sec}s"
+	#PS1_START_TIME=`date +%s`
+	echo $time_str
+}
+
+trap 'record_time' DEBUG
 
 PS1_reset='\[\e[0m\]'
 _mk_prompt() {
+	local EXIT="$?"
+	local TIME_DIFF=`time_diff_f`
+	#local TIME=`date "+%H:%M"`
     # Change the window title of X terminals
     case $TERM in
         xterm*|rxvt*|Eterm)
@@ -129,7 +161,7 @@ _mk_prompt() {
 
     gitbranch
     if [[ ! -z "$GITBRANCH" ]]; then
-        prefix+=("${PS1_green}⎇ $GITBRANCH${PS1_reset}")
+        prefix+=("${PS1_green}$GITBRANCH${PS1_reset}")
         # You must have that unicode "branch" character in your
         # terminal font
     fi
@@ -146,12 +178,17 @@ _mk_prompt() {
     else
         PS1="$hostStyle1${HOSTNAME/.*}$PS1_reset $PS1"
     fi
+
+	[[ "$TIME_DIFF" != "" ]] && PS1="$PS1_blue$TIME_DIFF$PS1_reset $PS1"
+
     if [[ ! -z "$prefix" ]]; then
         PS1="$PS1${prefix[@]} "
     fi
 
+	[[ "$EXIT" != 0 ]] && PS1="$PS1_red$EXIT$PS1_reset $PS1"
+
     if [[ ! -z "${VTE_VERSION}" ]]; then
-       __vte_prompt_command
+       type __vte_prompt_command 2> /dev/null && __vte_prompt_command
     fi
     export PS1
 }

@@ -1,0 +1,224 @@
+# Boxstarter options
+$Boxstarter.RebootOk=$true # Allow reboots?
+$Boxstarter.NoPassword=$false # Is this a machine with no login password?
+$Boxstarter.AutoLogin=$true # Save my password securely and auto-login after a reboot
+
+#--- Windows Settings ---
+Disable-BingSearch
+Disable-GameBarTips
+Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives -EnableShowProtectedOSFiles -EnableShowFileExtensions
+Set-TaskbarOptions -Size Small -Dock Bottom -Combine Full -Lock
+Set-TaskbarOptions -Size Small -Dock Bottom -Combine Full -AlwaysShowIconsOn
+Update-ExecutionPolicy Unrestricted
+Enable-RemoteDesktop
+Disable-InternetExplorerESC
+Disable-UAC
+Set-TaskbarSmall
+Update-ExecutionPolicy Unrestricted
+
+if (Test-PendingReboot) { Invoke-Reboot }
+
+### Fonts
+# cinst -y inconsolata 
+#cinst -y firacode
+# cinst -y sourcecodepro
+#cinst -y hackfont
+# cinst -y robotofonts
+# cinst -y envycoder
+# cinst -y dejavufonts
+# cinst -y bitstreamverafonts
+# cinst -y noto
+# cinst -y opensans
+# cinst -y font-awesome-font
+
+# Update Windows and reboot if necessary
+Install-WindowsUpdate -AcceptEula
+if (Test-PendingReboot) { Invoke-Reboot }
+
+## Install HyperV (requires Win 10 Pro)
+cinst -y Microsoft-Hyper-V-All -source windowsFeatures
+cinst -y Microsoft-Windows-Subsystem-Linux -source windowsfeatures
+
+# Packages
+
+## Git
+cinst -y git.install poshgit git-credential-winstore
+# cinst -y sourcetree
+
+## Editors
+cinst -y visualstudiocode
+cinst -y eclipse
+cinst -y vim-tux
+cinst -y r.studio
+
+# Programming languages
+# cinst -y jdk
+# cinst -y maven
+# cinst -y golang
+cinst -y python
+cinst -y pip
+cinst -y easy.install
+
+if (Test-PendingReboot) { Invoke-Reboot }
+
+## Basics
+cinst -y Gow     ## Linux CLI utils
+cinst -y autohotkey
+cinst -y vlc
+cinst -y mpv
+cinst -y GoogleChrome
+cinst -y firefox
+cinst -y 7zip.install
+cinst -y sysinternals
+cinst -y nmap
+cinst -y skype
+cinst -y virtualbox
+cinst -y inkscape
+cinst -y slack
+
+# cinst -y winpcap
+# cinst -y wireshark
+# cinst -y minikube
+# cinst -y fiddler4
+# cinst -y restler
+# cinst -y youtube-dl
+# cinst -y win-youtube-dl
+# cinst -y docker-for-windows
+# cinst -y ffmpeg
+# cinst -y DotNet3.5
+# cinst -y postman
+# cinst -y openvpn
+# cinst -y ccleaner
+# cinst -y winscp
+# cinst -y gimp
+# cinst -y calibre
+# cinst -y baretail
+# cinst -y pgadmin4
+# cinst -y winff
+# cinst -y keepassx
+# cinst -y cmder -pre
+# cinst -y hyper
+# cinst -y babun
+
+## Node, npm
+#cinst -y nodejs.install
+#npm install -g npm-windows-upgrade
+
+if (Test-PendingReboot) { Invoke-Reboot }
+
+#Azure functions
+# cinst -y  dotnetcore-sdk
+# npm install -g azure-functions-core-tools@core
+# cinst -y azure-cli
+
+# AWS
+# cinst -y awscli
+
+
+#--- Uninstall unecessary applications that come with Windows out of the box ---
+
+# 3D Builder
+# Get-AppxPackage Microsoft.3DBuilder | Remove-AppxPackage
+
+# Alarms
+# Get-AppxPackage Microsoft.WindowsAlarms | Remove-AppxPackage
+
+# Autodesk
+# Get-AppxPackage *Autodesk* | Remove-AppxPackage
+
+# Bing Weather, News, Sports, and Finance (Money):
+Get-AppxPackage Microsoft.BingFinance | Remove-AppxPackage
+Get-AppxPackage Microsoft.BingNews | Remove-AppxPackage
+Get-AppxPackage Microsoft.BingSports | Remove-AppxPackage
+# Get-AppxPackage Microsoft.BingWeather | Remove-AppxPackage
+
+# BubbleWitch
+Get-AppxPackage *BubbleWitch* | Remove-AppxPackage
+
+# Candy Crush
+Get-AppxPackage king.com.CandyCrush* | Remove-AppxPackage
+
+# Comms Phone
+Get-AppxPackage Microsoft.CommsPhone | Remove-AppxPackage
+
+# Dell
+Get-AppxPackage *Dell* | Remove-AppxPackage
+
+# Dropbox
+# Get-AppxPackage *Dropbox* | Remove-AppxPackage
+
+# Facebook
+Get-AppxPackage *Facebook* | Remove-AppxPackage
+
+# Feedback Hub
+Get-AppxPackage Microsoft.WindowsFeedbackHub | Remove-AppxPackage
+
+# Get Started
+Get-AppxPackage Microsoft.Getstarted | Remove-AppxPackage
+
+# Keeper
+Get-AppxPackage *Keeper* | Remove-AppxPackage
+
+# Mail & Calendar
+Get-AppxPackage microsoft.windowscommunicationsapps | Remove-AppxPackage
+
+# Maps
+Get-AppxPackage Microsoft.WindowsMaps | Remove-AppxPackage
+
+# March of Empires
+# Get-AppxPackage *MarchofEmpires* | Remove-AppxPackage
+
+# McAfee Security
+Get-AppxPackage *McAfee* | Remove-AppxPackage
+
+# Uninstall McAfee Security App
+$mcafee = gci "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall" | foreach { gp $_.PSPath } | ? { $_ -match "McAfee Security" } | select UninstallString
+if ($mcafee) {
+	$mcafee = $mcafee.UninstallString -Replace "C:\Program Files\McAfee\MSC\mcuihost.exe",""
+	Write "Uninstalling McAfee..."
+	start-process "C:\Program Files\McAfee\MSC\mcuihost.exe" -arg "$mcafee" -Wait
+}
+
+# Minecraft
+Get-AppxPackage *Minecraft* | Remove-AppxPackage
+
+# People
+Get-AppxPackage Microsoft.People | Remove-AppxPackage
+
+# Plex
+Get-AppxPackage *Plex* | Remove-AppxPackage
+
+# Sound Recorder
+# Get-AppxPackage Microsoft.WindowsSoundRecorder | Remove-AppxPackage
+
+# Solitaire
+# Get-AppxPackage *Solitaire* | Remove-AppxPackage
+
+# Sticky Notes
+Get-AppxPackage Microsoft.MicrosoftStickyNotes | Add-AppxPackage
+
+# Sway
+Get-AppxPackage Microsoft.Office.Sway | Remove-AppxPackage
+
+# Twitter
+Get-AppxPackage *Twitter* | Remove-AppxPackage
+
+# Xbox
+Get-AppxPackage Microsoft.XboxApp | Remove-AppxPackage
+Get-AppxPackage Microsoft.XboxIdentityProvider | Remove-AppxPackage
+
+# Zune Music, Movies & TV
+Get-AppxPackage Microsoft.ZuneMusic | Remove-AppxPackage
+Get-AppxPackage Microsoft.ZuneVideo | Remove-AppxPackage
+
+#--- Restore Temporary Settings ---
+Enable-UAC
+Enable-MicrosoftUpdate
+Install-WindowsUpdate -acceptEula
+
+#--- Rename the Computer ---
+# Requires restart, or add the -Restart flag
+# $computername = "dia"
+# if ($env:computername -ne $computername) {
+#	Rename-Computer -NewName $computername
+# }

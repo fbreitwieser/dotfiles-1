@@ -1,0 +1,51 @@
+#!/bin/bash
+
+green='\033[0;32m'
+yellow='\033[0;33m'
+light_blue='\033[0;34m'
+reset='\033[0m'
+
+file_tree() 
+{
+pid="$1"
+first="$2"
+
+indentation=$(printf "%${indent}s")
+
+PCPU=`ps -p $pid -o pcpu= | sed 's/  *//'`
+[[ "$first" != "TRUE" ]] && echo -e "$indentation"$(ps -o pid= -o cmd= -p $pid | perl -pe "s/^\s*/$light_blue/; s/\s+/ $green$PCPU% $reset/")
+#[[ "$first" != "TRUE" ]] && echo -e "$indentation"$(ps -o pid= -o cmd= -o pcpu= -p $pid | perl -pe "s/^\s*/$light_blue/; s/\s+/ $reset/")
+
+indent=$((indent + 3))
+
+export indentation=$(printf "%${indent}s")
+lsof -p $1 | perl -ane 'print "$ENV{indentation}$F[8]\n" if $F[8] ne "/bin/bash" && $F[4] eq "REG" && $F[3] ne "mem"' | tail -n +2
+lsof -p $1 | perl -ane 'print "$ENV{indentation}$F[8]\n" if $F[8] ne "/bin/bash" && $F[4] eq "REG" && $F[3] ne "mem"' | tail -n +2
+
+for child in $(ps -o pid --no-headers --ppid $pid) ; do file_tree $child ; done
+
+indent=$((indent - 3))
+}
+
+tmux_pstree() 
+{
+for s in `tmux list-sessions -F '#{session_id}:#{session_name}'` ; do
+	session_id=${s%:*}
+	session_name=${s#*:}
+	echo -e "\n$green$session_name$reset"
+
+	for p in $(tmux list-panes -s -F '#{window_index}:#{window_name}:#{pane_index}:#{pane_pid}' -t "$session_id") ; do
+		window_index=${p%%}
+		IFS=: read window_index window_name pane_index pane_pid <<< $p
+
+		printf "  ${yellow} $window_name [w$window_index, p$pane_index, pid $pane_pid]$reset\n"
+		file_tree  $pane_pid TRUE
+
+		#pstree -h -p -a -A $pane_pid
+
+	done
+done
+}
+
+tmux_pstree $@
+

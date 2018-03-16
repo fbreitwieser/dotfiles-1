@@ -19,7 +19,7 @@ colorscheme default
 
 "" Plugins:
 " Specify a directory for plugins
-call plug#begin('~/.vim/plugged')" Any valid git URL is allowed for plugin
+call plug#begin('~/.vim/plugged') " Any valid git URL is allowed for plugin
 "Plug 'Valloric/YouCompleteMe'
 "Plug 'tpope/vim-obsession'
 "Plug 'gikmx/ctrlp-obsession'
@@ -28,7 +28,7 @@ Plug 'ajh17/VimCompletesMe'  " tab completion does local keyword completion (^X^
 Plug 'bagrat/vim-workspace'
 Plug 'bogado/file-line'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'chrisbra/csv.vim'
+"Plug 'chrisbra/csv.vim'
 Plug 'derekwyatt/vim-fswitch'
 Plug 'easymotion/vim-easymotion'
 Plug 'majutsushi/tagbar'
@@ -50,12 +50,9 @@ call plug#end()
 
 """" Plugin options
 " vim workspace "
-noremap <Tab> :WSNext<CR>
-noremap <S-Tab> :WSPrev<CR>
 noremap <Leader><Tab> :WSClose<CR>
 noremap <Leader><S-Tab> :WSClose!<CR>
 noremap <C-t> :WSTabNew<CR>
-
 cabbrev bonly WSBufOnly
 "
 
@@ -204,11 +201,20 @@ if has("autocmd")
 
 endif
 
+""""" BUFFER OPTIONS
 " View buffers with <Leader>b
 "  :b  lets you autocomplete any open buffer
 "  :b! switch, and set current buffer to hidden
 "  :ls gives you buffers that you have currently open
 nnoremap <Leader>b :ls<CR>:b!<Space>#
+" Easier buffer navigation
+noremap <silent> [b :bprevious<CR>
+noremap <silent> ]b :bnext<CR>
+noremap <silent> [B :bfirst<CR>
+noremap <silent> ]B :blast<CR>
+
+noremap <Tab> :bnext<CR>
+noremap <S-Tab> :bprevious<CR>
 
 " FINDING FILES:
 " Search down into subfolders

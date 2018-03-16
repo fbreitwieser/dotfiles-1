@@ -1,0 +1,2 @@
+
+tail -n+2 $1 | sed 's/,.*//' | xargs -t -P5 -n1 fastq-dump --outdir fastq --gzip --skip-technical  --readids --read-filter pass --dumpbase --split-3 --clip

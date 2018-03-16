@@ -1,0 +1,57 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use Term::ANSIColor;
+ 
+my $key = '';
+
+my @tmux_sessions = `tmux ls | sed 's/:.*//'`;
+chomp @tmux_sessions;
+
+my %key_to_session;
+my $keys = "=";
+my $text = "tmux selector: ";
+$key_to_session{r} = "ranger";
+$keys .= "|r";
+my $first = 1;
+foreach my $s (@tmux_sessions) {
+    chomp $s;
+    my $key = lc(substr($s,0,1));
+    ++$key while (defined $key_to_session{$key});
+    $key_to_session{$key} = "tmux at -dt $s";
+	if ($first) {
+		$first = 0;
+	} else {
+		$text .= ",";
+	}
+    $text .= " ".colored($s,"blue").": $key";
+    $keys .= "|$key";
+}
+$text .= ". > ";
+
+#my @dirs = `dirs -v`;
+#foreach my $dir (@dirs) {
+#    chomp $dir;
+#    my ($key,$s) = split(/  /,$dir);
+#    $key_to_session{$key} = "cd $s";
+#    $text .= "\t $key = cd $s \n";
+#
+#}
+
+while (1) {
+	$key = '';
+	print $text;
+	while($key !~ /($keys)/i) {
+	    $key = getc(); # read a single character
+	}
+ 
+	if ($key eq "=") {
+		`tmux_pid`;
+	} else {
+		my $cmd = $key_to_session{$key};
+		print $cmd."\n";
+		`sh -c "$cmd"`;
+	}
+}
+
